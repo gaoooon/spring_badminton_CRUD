@@ -10,6 +10,7 @@ import com.yonex.badminton.entity.RacketType;
 import com.yonex.badminton.repository.PlayerRepository;
 import com.yonex.badminton.repository.RacketRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +39,14 @@ public class PlayerService {
         return new GetPlayerRes(player.getName(), player.getAge(), racket.getName());
     }
 
+    @Transactional
     public void postPlayer(PostPlayerReq body) {
         Racket racket = new Racket("hihi", RacketType.HEAD_HEAVY);
         Player newPlayer = new Player(body.getName(), body.getAge(), racket);
         playerRepository.save(newPlayer);
     }
 
+    @Transactional
     public void putPlayerById(Long id, PutPlayerReq body) {
         Player player = playerRepository.findById(id).orElseThrow();
         Racket racket = racketRepository.findById(id).orElseThrow();
@@ -54,10 +57,12 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
+    @Transactional
     public void deletePlayers() {
         playerRepository.deleteAll();
     }
 
+    @Transactional
     public void deletePlayerById(Long id) {
         playerRepository.deleteById(id);
     }
